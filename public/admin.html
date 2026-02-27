@@ -1,0 +1,559 @@
+<!-- public/admin.html -->
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🎬 Admin - Convocatorias Audiovisuales</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        .admin-container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 2rem;
+        }
+
+        .upload-section {
+            background: white;
+            border-radius: 1rem;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        .upload-area {
+            border: 2px dashed #e5e7eb;
+            border-radius: 1rem;
+            padding: 3rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .upload-area:hover {
+            border-color: #4f46e5;
+            background: #f9fafb;
+        }
+
+        .upload-area.dragover {
+            border-color: #4f46e5;
+            background: #e0e7ff;
+        }
+
+        .upload-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .upload-input {
+            display: none;
+        }
+
+        .upload-button {
+            background: #4f46e5;
+            color: white;
+            border: none;
+            padding: 0.75rem 2rem;
+            border-radius: 0.5rem;
+            font-size: 1rem;
+            cursor: pointer;
+            margin-top: 1rem;
+        }
+
+        .upload-button:hover {
+            background: #4338ca;
+        }
+
+        .upload-button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 4px;
+            background: #e5e7eb;
+            border-radius: 2px;
+            margin: 1rem 0;
+            overflow: hidden;
+            display: none;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: #4f46e5;
+            width: 0%;
+            transition: width 0.3s;
+        }
+
+        .result-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+
+        .stat-card {
+            background: #f9fafb;
+            border-radius: 0.75rem;
+            padding: 1.5rem;
+            text-align: center;
+        }
+
+        .stat-card h3 {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+            color: #4f46e5;
+        }
+
+        .stat-card p {
+            color: #6b7280;
+            font-size: 0.9rem;
+        }
+
+        .stat-card.success {
+            border-left: 4px solid #10b981;
+        }
+
+        .stat-card.warning {
+            border-left: 4px solid #f59e0b;
+        }
+
+        .stat-card.info {
+            border-left: 4px solid #3b82f6;
+        }
+
+        .stat-card.error {
+            border-left: 4px solid #ef4444;
+        }
+
+        .error-list {
+            background: #fee2e2;
+            border-radius: 0.5rem;
+            padding: 1rem;
+            margin-top: 1rem;
+            color: #b91c1c;
+        }
+
+        .tabs {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .tab {
+            padding: 0.5rem 1rem;
+            background: none;
+            border: none;
+            border-bottom: 2px solid transparent;
+            cursor: pointer;
+            font-weight: 500;
+        }
+
+        .tab.active {
+            border-bottom-color: #4f46e5;
+            color: #4f46e5;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .stats-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .stats-table th,
+        .stats-table td {
+            padding: 0.75rem;
+            text-align: left;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .history-item {
+            background: #f9fafb;
+            border-radius: 0.5rem;
+            padding: 1rem;
+            margin-bottom: 0.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .back-link {
+            display: inline-block;
+            margin-bottom: 2rem;
+            color: #4f46e5;
+            text-decoration: none;
+        }
+
+        .back-link:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <h1 class="logo">🎬 Admin - Convocatorias Audiovisuales</h1>
+            <a href="/" class="btn-page">← Volver al inicio</a>
+        </div>
+    </nav>
+
+    <div class="admin-container">
+        <!-- Añadir en admin.html -->
+        <div class="upload-section">
+            <h2>🎯 PRIORIDADES ESTRATÉGICAS</h2>
+            <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem;">
+                <div class="stat-card" style="border-left-color: #2563eb;">
+                    <h3>🔵 Contratos públicos</h3>
+                    <p style="font-size: 0.9rem;">Flujo de caja inmediato</p>
+                    <div id="contratosCount">Cargando...</div>
+                </div>
+                <div class="stat-card" style="border-left-color: #16a34a;">
+                    <h3>🟢 Subvenciones ICAA</h3>
+                    <p style="font-size: 0.9rem;">Producción propia</p>
+                    <div id="icaaCount">Cargando...</div>
+                </div>
+                <div class="stat-card" style="border-left-color: #9333ea;">
+                    <h3>🟣 Europa Creativa</h3>
+                    <p style="font-size: 0.9rem;">Proyectos europeos</p>
+                    <div id="europaCount">Cargando...</div>
+                </div>
+            </div>
+        </div>
+        <!-- Sección de subida -->
+        <div class="upload-section">
+            <h2>📤 Subir archivo JSON</h2>
+            <p>Selecciona un archivo JSON con convocatorias de BDNS. Los duplicados se actualizarán automáticamente.</p>
+
+            <div class="upload-area" id="uploadArea">
+                <div class="upload-icon">📁</div>
+                <p>Arrastra tu archivo JSON aquí o haz clic para seleccionar</p>
+                <p style="font-size: 0.9rem; color: #6b7280;">Solo archivos .json</p>
+                <input type="file" id="fileInput" accept=".json" class="upload-input">
+                <button class="upload-button" id="uploadButton">Seleccionar archivo</button>
+            </div>
+
+            <div class="progress-bar" id="progressBar">
+                <div class="progress-fill" id="progressFill"></div>
+            </div>
+
+            <div id="uploadResult" style="display: none;">
+                <h3>📊 Resultado de la importación</h3>
+                <div class="result-stats" id="resultStats"></div>
+                <div id="errorContainer" class="error-list" style="display: none;"></div>
+            </div>
+        </div>
+        <!-- En admin.html, después de la sección de subida -->
+        <div class="upload-section">
+            <h2>📡 Descarga automática</h2>
+            <p>Descarga convocatorias directamente desde la API oficial de SNPSAP</p>
+
+            <div style="display: flex; gap: 1rem; align-items: center;">
+                <select id="fetchYear" class="filter-group" style="width: auto;">
+                    <option value="2026">2026</option>
+                    <option value="2025">2025</option>
+                    <option value="2024">2024</option>
+                    <option value="2023">2023</option>
+                </select>
+
+                <button class="upload-button" id="fetchFromApiBtn">
+                    📥 Descargar del año
+                </button>
+            </div>
+
+            <div id="fetchResult" style="display: none; margin-top: 1rem;" class="result-stats"></div>
+        </div>
+
+        <script>
+            // Añade este código al final del script de admin.html
+            document.getElementById('fetchFromApiBtn').addEventListener('click', async () => {
+                const year = document.getElementById('fetchYear').value;
+                const btn = document.getElementById('fetchFromApiBtn');
+
+                btn.disabled = true;
+                btn.textContent = '⏳ Descargando...';
+
+                try {
+                    const response = await fetch(`${API_URL}/admin/fetch-from-api`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ year })
+                    });
+
+                    const result = await response.json();
+
+                    if (result.success) {
+                        const resultDiv = document.getElementById('fetchResult');
+                        resultDiv.style.display = 'block';
+                        resultDiv.innerHTML = `
+                <div class="stat-card success">
+                    <h3>${result.stats.nuevas}</h3>
+                    <p>✅ Nuevas</p>
+                </div>
+                <div class="stat-card info">
+                    <h3>${result.stats.actualizadas}</h3>
+                    <p>🔄 Actualizadas</p>
+                </div>
+                <div class="stat-card">
+                    <h3>${result.stats.descargadas}</h3>
+                    <p>📊 Total</p>
+                </div>
+            `;
+                    }
+
+                } catch (error) {
+                    alert('Error en la descarga: ' + error.message);
+                } finally {
+                    btn.disabled = false;
+                    btn.textContent = '📥 Descargar del año';
+                }
+            });
+        </script>
+        <!-- Estadísticas detalladas -->
+        <div class="upload-section">
+            <div class="tabs">
+                <button class="tab active" onclick="showTab('stats')">📊 Estadísticas</button>
+                <button class="tab" onclick="showTab('history')">📋 Historial</button>
+            </div>
+
+            <div id="statsTab" class="tab-content active">
+                <h3>📈 Estadísticas detalladas</h3>
+                <div id="detailedStats"></div>
+            </div>
+
+            <div id="historyTab" class="tab-content">
+                <h3>🕒 Últimas actualizaciones</h3>
+                <div id="updateHistory"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const API_URL = 'http://localhost:3001';
+
+        // Elementos del DOM
+        const uploadArea = document.getElementById('uploadArea');
+        const fileInput = document.getElementById('fileInput');
+        const uploadButton = document.getElementById('uploadButton');
+        const progressBar = document.getElementById('progressBar');
+        const progressFill = document.getElementById('progressFill');
+        const uploadResult = document.getElementById('uploadResult');
+        const resultStats = document.getElementById('resultStats');
+        const errorContainer = document.getElementById('errorContainer');
+
+        // Eventos de drag & drop
+        uploadArea.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            uploadArea.classList.add('dragover');
+        });
+
+        uploadArea.addEventListener('dragleave', () => {
+            uploadArea.classList.remove('dragover');
+        });
+
+        uploadArea.addEventListener('drop', (e) => {
+            e.preventDefault();
+            uploadArea.classList.remove('dragover');
+
+            const file = e.dataTransfer.files[0];
+            if (file && file.name.endsWith('.json')) {
+                uploadFile(file);
+            } else {
+                alert('Por favor, selecciona un archivo JSON');
+            }
+        });
+
+        uploadButton.addEventListener('click', () => {
+            fileInput.click();
+        });
+
+        fileInput.addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (file) {
+                uploadFile(file);
+            }
+        });
+
+        async function uploadFile(file) {
+            const formData = new FormData();
+            formData.append('jsonfile', file);
+
+            uploadResult.style.display = 'none';
+            progressBar.style.display = 'block';
+            progressFill.style.width = '0%';
+            uploadButton.disabled = true;
+
+            try {
+                const xhr = new XMLHttpRequest();
+
+                xhr.upload.addEventListener('progress', (e) => {
+                    if (e.lengthComputable) {
+                        const percent = (e.loaded / e.total) * 100;
+                        progressFill.style.width = percent + '%';
+                    }
+                });
+
+                xhr.onload = function () {
+                    if (xhr.status === 200) {
+                        const result = JSON.parse(xhr.responseText);
+                        showResult(result);
+                    } else {
+                        alert('Error en la subida: ' + xhr.statusText);
+                    }
+                    progressBar.style.display = 'none';
+                    uploadButton.disabled = false;
+                    fileInput.value = '';
+                };
+
+                xhr.onerror = function () {
+                    alert('Error en la subida');
+                    progressBar.style.display = 'none';
+                    uploadButton.disabled = false;
+                };
+
+                xhr.open('POST', `${API_URL}/admin/upload`, true);
+                xhr.send(formData);
+
+            } catch (error) {
+                console.error('Error:', error);
+                alert('Error al subir el archivo');
+                progressBar.style.display = 'none';
+                uploadButton.disabled = false;
+            }
+        }
+
+        function showResult(result) {
+            uploadResult.style.display = 'block';
+
+            if (result.success) {
+                const stats = result.stats;
+                resultStats.innerHTML = `
+                    <div class="stat-card success">
+                        <h3>${stats.insertados}</h3>
+                        <p>✅ Nuevas convocatorias</p>
+                    </div>
+                    <div class="stat-card info">
+                        <h3>${stats.actualizados}</h3>
+                        <p>🔄 Actualizadas</p>
+                    </div>
+                    <div class="stat-card warning">
+                        <h3>${stats.duplicados}</h3>
+                        <p>⏩ Duplicadas</p>
+                    </div>
+                    <div class="stat-card ${stats.errores > 0 ? 'error' : 'success'}">
+                        <h3>${stats.errores}</h3>
+                        <p>${stats.errores > 0 ? '❌ Errores' : '✅ Sin errores'}</p>
+                    </div>
+                `;
+
+                if (stats.errores > 0 && result.errores) {
+                    errorContainer.style.display = 'block';
+                    errorContainer.innerHTML = '<h4>Errores encontrados:</h4><ul>' +
+                        result.errores.map(e => `<li>Registro ${e.index}: ${e.error}</li>`).join('') +
+                        '</ul>';
+                } else {
+                    errorContainer.style.display = 'none';
+                }
+            }
+
+            // Recargar estadísticas
+            loadDetailedStats();
+            loadUpdateHistory();
+        }
+
+        async function loadDetailedStats() {
+            try {
+                const response = await fetch(`${API_URL}/admin/stats/detailed`);
+                const stats = await response.json();
+
+                const statsHtml = `
+                    <h4>Por año</h4>
+                    <table class="stats-table">
+                        <tr>
+                            <th>Año</th>
+                            <th>Convocatorias</th>
+                        </tr>
+                        ${stats.porAño.map(a => `
+                            <tr>
+                                <td>${a._id || 'Sin año'}</td>
+                                <td>${a.count}</td>
+                            </tr>
+                        `).join('')}
+                    </table>
+
+                    <h4 style="margin-top: 2rem;">Top 10 regiones</h4>
+                    <table class="stats-table">
+                        <tr>
+                            <th>Región</th>
+                            <th>Convocatorias</th>
+                        </tr>
+                        ${stats.porRegion.map(r => `
+                            <tr>
+                                <td>${r._id || 'Sin región'}</td>
+                                <td>${r.count}</td>
+                            </tr>
+                        `).join('')}
+                    </table>
+                `;
+
+                document.getElementById('detailedStats').innerHTML = statsHtml;
+
+            } catch (error) {
+                console.error('Error cargando estadísticas:', error);
+            }
+        }
+
+        async function loadUpdateHistory() {
+            try {
+                const response = await fetch(`${API_URL}/admin/stats/detailed`);
+                const stats = await response.json();
+
+                const historyHtml = stats.ultimasActualizaciones.map(item => `
+                    <div class="history-item">
+                        <span>${item.title.substring(0, 60)}...</span>
+                        <span class="status-badge status-${item.status}">${item.status}</span>
+                        <span style="color: #6b7280; font-size: 0.9rem;">
+                            ${new Date(item.updated_at).toLocaleString()}
+                        </span>
+                    </div>
+                `).join('');
+
+                document.getElementById('updateHistory').innerHTML = historyHtml || '<p>No hay actualizaciones recientes</p>';
+
+            } catch (error) {
+                console.error('Error cargando historial:', error);
+            }
+        }
+
+        function showTab(tab) {
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+
+            if (tab === 'stats') {
+                document.querySelector('.tab').classList.add('active');
+                document.getElementById('statsTab').classList.add('active');
+            } else {
+                document.querySelectorAll('.tab')[1].classList.add('active');
+                document.getElementById('historyTab').classList.add('active');
+                loadUpdateHistory();
+            }
+        }
+
+        // Cargar estadísticas al iniciar
+        document.addEventListener('DOMContentLoaded', () => {
+            loadDetailedStats();
+        });
+    </script>
+</body>
+
+</html>

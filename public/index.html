@@ -17,6 +17,10 @@
             <div class="stats-badge" id="stats-badge">
                 Cargando...
             </div>
+            <div style="display: flex; align-items: center; gap: 1rem;">
+                <div class="stats-badge" id="stats-badge">Cargando...</div>
+                <a href="/admin.html" class="btn-page" style="background: #4f46e5; color: white;">⚙️ Admin</a>
+            </div>
         </div>
     </nav>
 
@@ -31,6 +35,27 @@
                 <div class="filter-group">
                     <label>Buscar</label>
                     <input type="text" id="search" placeholder="Palabras clave...">
+                </div>
+
+                <div class="filter-group">
+                    <label>Tipo de oportunidad</label>
+                    <select id="opportunityType">
+                        <option value="">Todas</option>
+                        <option value="subvencion">🟢 Subvención</option>
+                        <option value="contrato">🔵 Contrato público</option>
+                        <option value="festival">🟣 Festival/Premio</option>
+                    </select>
+                </div>
+
+                <div class="filter-group">
+                    <label>Categoría estratégica</label>
+                    <select id="strategicCategory">
+                        <option value="">Todas</option>
+                        <option value="audiovisual">🎬 Audiovisual</option>
+                        <option value="tecnico">⚙️ Técnico</option>
+                        <option value="estrategico">💡 Estratégico</option>
+                        <option value="digitalizacion">📱 Digitalización</option>
+                    </select>
                 </div>
                 <div class="filter-group">
                     <label>Relevancia</label>
