@@ -1,0 +1,115 @@
+<!-- public/index.html -->
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🎬 Gestor de Convocatorias Audiovisuales</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <h1 class="logo">🎬 Convocatorias Audiovisuales</h1>
+            <div class="stats-badge" id="stats-badge">
+                Cargando...
+            </div>
+        </div>
+    </nav>
+
+    <main class="container">
+        <!-- Filtros -->
+        <section class="filters-section">
+            <div class="filters-header">
+                <h2>🔍 Filtros</h2>
+                <button class="btn-clear" id="clearFilters">Limpiar filtros</button>
+            </div>
+            <div class="filters-grid">
+                <div class="filter-group">
+                    <label>Buscar</label>
+                    <input type="text" id="search" placeholder="Palabras clave...">
+                </div>
+                <div class="filter-group">
+                    <label>Relevancia</label>
+                    <select id="relevancia">
+                        <option value="">Todas</option>
+                        <option value="muy_alta">🎬 Muy alta (cine/audiovisual)</option>
+                        <option value="alta">📹 Alta (video/digital)</option>
+                        <option value="media">🎨 Media (arte/cultural)</option>
+                        <option value="baja">📌 Baja (otras artes)</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label>Estado</label>
+                    <select id="status">
+                        <option value="">Todos</option>
+                        <option value="pending">⏳ Pendiente</option>
+                        <option value="reviewed">👀 Revisada</option>
+                        <option value="applied">📝 Aplicada</option>
+                        <option value="discarded">❌ Descartada</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label>Fuente</label>
+                    <select id="source">
+                        <option value="">Todas</option>
+                        <option value="bdns">📋 BDNS</option>
+                        <option value="manual">✍️ Manual</option>
+                    </select>
+                </div>
+            </div>
+        </section>
+
+        <!-- Resultados -->
+        <section class="results-section">
+            <div class="results-header">
+                <h2>📋 Convocatorias <span id="results-count"></span></h2>
+                <div class="pagination">
+                    <button class="btn-page" id="prevPage" disabled>← Anterior</button>
+                    <span id="page-info">Página 1</span>
+                    <button class="btn-page" id="nextPage">Siguiente →</button>
+                </div>
+            </div>
+
+            <div class="loading" id="loading">
+                <div class="spinner"></div>
+                <p>Cargando convocatorias...</p>
+            </div>
+
+            <div class="calls-grid" id="calls-grid">
+                <!-- Las convocatorias se insertarán aquí -->
+            </div>
+
+            <div class="pagination-bottom" id="pagination-bottom">
+                <!-- Paginación duplicada abajo -->
+            </div>
+        </section>
+    </main>
+
+    <!-- Modal para ver detalles -->
+    <div class="modal" id="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="modal-title"></h2>
+                <button class="modal-close" id="modalClose">&times;</button>
+            </div>
+            <div class="modal-body" id="modal-body">
+                <!-- Detalles se cargarán aquí -->
+            </div>
+            <div class="modal-footer">
+                <button class="btn-status" data-status="pending">⏳ Pendiente</button>
+                <button class="btn-status" data-status="reviewed">👀 Revisada</button>
+                <button class="btn-status" data-status="applied">📝 Aplicada</button>
+                <button class="btn-status" data-status="discarded">❌ Descartada</button>
+                <a href="#" target="_blank" class="btn-link" id="modalLink">Ver original</a>
+            </div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+
+</html>

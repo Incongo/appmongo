@@ -1,0 +1,12 @@
+[
+  {
+    "texto": "Fecha de registro Fecha de publicación Documento",
+    "enlace": null,
+    "selector": "[role=\"row\"]"
+  },
+  {
+    "texto": "Diario oficial Fecha de publicación Título del anuncio Título del anuncio (Cooficial) URL",
+    "enlace": null,
+    "selector": "[role=\"row\"]"
+  }
+]
